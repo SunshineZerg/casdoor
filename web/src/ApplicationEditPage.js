@@ -156,6 +156,38 @@ class ApplicationEditPage extends React.Component {
       });
   }
 
+  renderSidePictureOption() {
+    return (
+      <Row>
+        <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 2}>
+          {Setting.getLabel(i18next.t("general:Side picture"), i18next.t("general:Side picture - Tooltip"))} :
+        </Col>
+        <Col span={22} style={(Setting.isMobile()) ? {maxWidth: "100%"} : {}}>
+          <Row style={{marginTop: "20px"}} >
+            <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 1}>
+              {Setting.getLabel(i18next.t("general:URL"), i18next.t("general:URL - Tooltip"))} :
+            </Col>
+            <Col span={23} >
+              <Input prefix={<LinkOutlined />} value={this.state.application.sidePicture} onChange={e => {
+                this.updateApplicationField("sidePicture", e.target.value);
+              }} />
+            </Col>
+          </Row>
+          <Row style={{marginTop: "20px"}} >
+            <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 1}>
+              {i18next.t("general:Preview")}:
+            </Col>
+            <Col span={23} >
+              <a target="_blank" rel="noreferrer" href={this.state.application.sidePicture}>
+                <img src={this.state.application.sidePicture} alt={this.state.application.sidePicture} height={90} style={{marginBottom: "20px"}} />
+              </a>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    );
+  }
+
   renderApplication() {
     const preview = JSON.stringify(template, null, 2);
     return (
@@ -214,6 +246,19 @@ class ApplicationEditPage extends React.Component {
             </Row>
           </Col>
         </Row>
+        <Row style={{marginTop: "20px"}} >
+          <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 19 : 2}>
+            {Setting.getLabel(i18next.t("application:Display side picture"), i18next.t("application:Display side picture - Tooltip"))} :
+          </Col>
+          <Col span={1} >
+            <Switch checked={this.state.application.enableSidePicture} onChange={checked => {
+              this.updateApplicationField("enableSidePicture", checked);
+            }} />
+          </Col>
+        </Row>
+        {
+          this.state.application.enableSidePicture ? this.renderSidePictureOption() : null
+        }
         <Row style={{marginTop: "20px"}} >
           <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 2}>
             {Setting.getLabel(i18next.t("general:Home"), i18next.t("general:Home - Tooltip"))} :
