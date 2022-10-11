@@ -673,16 +673,18 @@ class LoginPage extends React.Component {
     }
   }
   renderSidePicture(application, formStyle) {
+    // eslint-disable-next-line no-console
+    console.log(application);
     if (application.enableSidePicture === true) {
       application.formOffset = 0;
     }
     return (
       <Row style={{borderCollapse: "collapse"}}>
         <Col span={8} offset={4}>
-          <div className="login-img" style={{boxShadow: "20px 0px 10px 0px rgba(0,0,0,0.5)", borderCollapse: "collapse", borderRadius: 5, border: "1px", borderStyle: "solid", backgroundImage: this.state.application.sidePicture, top: 0, bottom: 0}}>
+          <div className="login-img" style={{boxShadow: "0px 0px 10px 0px rgba(0.5,0,0,0.5)", borderCollapse: "collapse", borderTopLeftRadius: 5, borderBottomLeftRadius: 5, border: "1px solid transparent", borderStyle: "solid", backgroundSize: "100% 100%", backgroundImage: `url(${application.sidePicture})`, top: 0, bottom: 0, height: "100%"}}>
           </div>
         </Col>
-        <Col span={8} style={{boxShadow: "20px 0px 10px 0px rgba(0,0,0,0.5)", borderCollapse: "collapse", borderRadius: 5, border: "1px", borderStyle: "solid", display: "flex", justifyContent: "center", top: 0, bottom: 0}}>
+        <Col span={8} style={{boxShadow: "20px 0px 10px 0px rgba(0.5,0,0,0.5)", borderCollapse: "collapse", borderTopRightRadius: 5, borderBottomRightRadius: 5, border: "1px solid transparent", borderRight: "none", display: "flex", justifyContent: "center", top: 0, bottom: 0}}>
           <div className="login-content">
             <div style={{marginTop: "35%", marginBottom: "20%", textAlign: "center", ...formStyle}}>
               <SelectLanguageBox id="language-box-corner" style={{top: "18%", right: "-15%"}} />
@@ -773,8 +775,8 @@ class LoginPage extends React.Component {
       <div className="loginBackground" style={{alignItems: "center", backgroundImage: Setting.inIframe() || Setting.isMobile() ? null : `url(${application.formBackgroundUrl})`}}>
         <CustomGithubCorner />
         {
-          application.enableSidePicture === true ? this.renderSidePicture(application, formStyle) : this.rendernoSidePicture(application, formStyle)
-          // this.renderSidePicture(application, formStyle)
+          // application.enableSidePicture === true ? this.renderSidePicture(application, formStyle) : this.rendernoSidePicture(application, formStyle)
+          this.renderSidePicture(application, formStyle)
         }
       </div>
     );
