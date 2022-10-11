@@ -37,6 +37,7 @@ class LoginPage extends React.Component {
     super(props);
     this.state = {
       classes: props,
+      sidePicture: props.sidePicture,
       type: props.type,
       applicationName: props.applicationName !== undefined ? props.applicationName : (props.match === undefined ? null : props.match.params.applicationName),
       owner: props.owner !== undefined ? props.owner : (props.match === undefined ? null : props.match.params.owner),
@@ -671,13 +672,85 @@ class LoginPage extends React.Component {
       );
     }
   }
-
+  renderSidePicture(application, formStyle) {
+    if (application.enableSidePicture === true) {
+      application.formOffset = 0;
+    }
+    return (
+      <Row style={{borderCollapse: "collapse"}}>
+        <Col span={8} offset={4}>
+          <div className="login-img" style={{boxShadow: "20px 0px 10px 0px rgba(0,0,0,0.5)", borderCollapse: "collapse", borderRadius: 5, border: "1px", borderStyle: "solid", backgroundImage: this.state.application.sidePicture, top: 0, bottom: 0}}>
+          </div>
+        </Col>
+        <Col span={8} style={{boxShadow: "20px 0px 10px 0px rgba(0,0,0,0.5)", borderCollapse: "collapse", borderRadius: 5, border: "1px", borderStyle: "solid", display: "flex", justifyContent: "center", top: 0, bottom: 0}}>
+          <div className="login-content">
+            <div style={{marginTop: "35%", marginBottom: "20%", textAlign: "center", ...formStyle}}>
+              <SelectLanguageBox id="language-box-corner" style={{top: "18%", right: "-15%"}} />
+              <div>
+                {
+                  Setting.renderHelmet(application)
+                }
+                {
+                  Setting.renderLogo(application)
+                }
+                {/* {*/}
+                {/*  this.state.clientId !== null ? "Redirect" : null*/}
+                {/* }*/}
+                {
+                  this.renderSignedInBox()
+                }
+                {
+                  this.renderForm(application)
+                }
+              </div>
+            </div>
+          </div>
+        </Col>
+      </Row>
+    );
+  }
+  rendernoSidePicture(application, formStyle) {
+    if (application.enableSidePicture === true) {
+      application.formOffset = 0;
+    }
+    return (
+      <Row style={{borderRadius: 5}}>
+        <Col span={8} offset={4}>
+          <div className="login-img" style={{backgroundImage: this.state.application.sidePicture, top: 0, bottom: 0}}>
+          </div>
+        </Col>
+        <Col span={8} offset={application.formOffset === 0 || Setting.inIframe() || Setting.isMobile() ? 8 : application.formOffset} style={{display: "flex", justifyContent: "center", top: 0, bottom: 0}}>
+          <div className="login-content">
+            <div style={{marginTop: "40%", marginBottom: "25%", textAlign: "center", ...formStyle}}>
+              <SelectLanguageBox id="language-box-corner" style={{top: "18%", right: "-15%"}} />
+              <div>
+                {
+                  Setting.renderHelmet(application)
+                }
+                {
+                  Setting.renderLogo(application)
+                }
+                {/* {*/}
+                {/*  this.state.clientId !== null ? "Redirect" : null*/}
+                {/* }*/}
+                {
+                  this.renderSignedInBox()
+                }
+                {
+                  this.renderForm(application)
+                }
+              </div>
+            </div>
+          </div>
+        </Col>
+      </Row>
+    );
+  }
   render() {
     const application = this.getApplicationObj();
     if (application === null) {
       return Util.renderMessageLarge(this, this.state.msg);
     }
-
     if (application.signinHtml !== "") {
       return (
         <div dangerouslySetInnerHTML={{__html: application.signinHtml}} />
@@ -697,34 +770,12 @@ class LoginPage extends React.Component {
     const formStyle = Setting.inIframe() ? null : Setting.parseObject(application.formCss);
 
     return (
-      <div className="loginBackground" style={{backgroundImage: Setting.inIframe() || Setting.isMobile() ? null : `url(${application.formBackgroundUrl})`}}>
+      <div className="loginBackground" style={{alignItems: "center", backgroundImage: Setting.inIframe() || Setting.isMobile() ? null : `url(${application.formBackgroundUrl})`}}>
         <CustomGithubCorner />
-        <Row>
-          <Col span={8} offset={application.formOffset === 0 || Setting.inIframe() || Setting.isMobile() ? 8 : application.formOffset} style={{display: "flex", justifyContent: "center"}}>
-            <div className="login-content">
-              <div style={{marginTop: "80px", marginBottom: "50px", textAlign: "center", ...formStyle}}>
-                <SelectLanguageBox id="language-box-corner" style={{top: formStyle !== null ? "80px" : "45px", right: formStyle !== null ? "5px" : "-45px"}} />
-                <div>
-                  {
-                    Setting.renderHelmet(application)
-                  }
-                  {
-                    Setting.renderLogo(application)
-                  }
-                  {/* {*/}
-                  {/*  this.state.clientId !== null ? "Redirect" : null*/}
-                  {/* }*/}
-                  {
-                    this.renderSignedInBox()
-                  }
-                  {
-                    this.renderForm(application)
-                  }
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
+        {
+          application.enableSidePicture === true ? this.renderSidePicture(application, formStyle) : this.rendernoSidePicture(application, formStyle)
+          // this.renderSidePicture(application, formStyle)
+        }
       </div>
     );
   }
