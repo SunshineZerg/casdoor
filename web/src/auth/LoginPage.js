@@ -49,12 +49,27 @@ class LoginPage extends React.Component {
       validEmail: false,
       validPhone: false,
       loginMethod: "password",
+      dimensions: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      },
     };
 
     if (this.state.type === "cas" && props.match?.params.casApplicationName !== undefined) {
       this.state.owner = props.match?.params.owner;
       this.state.applicationName = props.match?.params.casApplicationName;
     }
+
+    window.addEventListener("resize", this.updateDiemensions.bind(this));
+  }
+
+  updateDiemensions() {
+    this.setState({
+      dimensions: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      },
+    });
   }
 
   UNSAFE_componentWillMount() {
@@ -673,21 +688,45 @@ class LoginPage extends React.Component {
     }
   }
   renderSidePicture(application, formStyle) {
-    // eslint-disable-next-line no-console
-    console.log(application);
-    if (application.enableSidePicture === true) {
-      application.formOffset = 0;
+
+    const isFullSize = () => this.state.dimensions.width > 1100;
+
+    /**
+     * @summary convert form offset
+     * @param { 2 | 8 | 14} offset 
+     */
+    function convertFormOffset(offset) {
+
+      if (!isFullSize()) {
+        return "center";
+      }
+
+      switch (offset) {
+      case 2:
+        return "flex-start";
+      case 8:
+        return "center";
+      case 14:
+        return "flex-end";
+      default:
+        return "center";
+      }
     }
+
     return (
-      <Row style={{borderCollapse: "collapse"}}>
-        <Col span={8} offset={4}>
-          <div className="login-img" style={{boxShadow: "0px 0px 10px 0px rgba(0.5,0,0,0.5)", borderCollapse: "collapse", borderTopLeftRadius: 5, borderBottomLeftRadius: 5, border: "1px solid transparent", borderStyle: "solid", backgroundSize: "100% 100%", backgroundImage: `url(${application.sidePicture})`, top: 0, bottom: 0, height: "100%"}}>
-          </div>
-        </Col>
-        <Col span={8} style={{boxShadow: "20px 0px 10px 0px rgba(0.5,0,0,0.5)", borderCollapse: "collapse", borderTopRightRadius: 5, borderBottomRightRadius: 5, border: "1px solid transparent", borderRight: "none", display: "flex", justifyContent: "center", top: 0, bottom: 0}}>
-          <div className="login-content">
-            <div style={{marginTop: "35%", marginBottom: "20%", textAlign: "center", ...formStyle}}>
-              <SelectLanguageBox id="language-box-corner" style={{top: "18%", right: "-15%"}} />
+      <Row style={{height: "100%", marginLeft: "10rem", marginRight: "10rem", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: convertFormOffset.bind(this)(application.formOffset)}}>
+        <Col span={15}
+          style={{height: "65%", minHeight: "480px", minWidth: isFullSize() ? "800px" : "440px", maxWidth: "800px", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "1rem", boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px"}}>
+          {
+            isFullSize() ?
+              <div className="login-img" style={{width: "100%", height: "100%", display: "flex", flexGrow: 1, flexBasis: 0, justifyContent: "center", alignItems: "center", backgroundColor: "#7f5de3", borderRadius: "1rem 0rem 0rem 1rem"}}>
+                <img style={{display: "block", maxWidth: "50%", height: "auto"}} src={application.sidePicture}></img>
+              </div> :
+              null
+          }
+          <div className="login-content" style={{flexGrow: 1, flexBasis: 0}}>
+            <div style={{marginTop: "25%", marginBottom: "15%", textAlign: "center", ...formStyle}}>
+              <SelectLanguageBox id="language-box-corner" style={{top: "15%", right: "5%"}} />
               <div>
                 {
                   Setting.renderHelmet(application)
@@ -695,9 +734,6 @@ class LoginPage extends React.Component {
                 {
                   Setting.renderLogo(application)
                 }
-                {/* {*/}
-                {/*  this.state.clientId !== null ? "Redirect" : null*/}
-                {/* }*/}
                 {
                   this.renderSignedInBox()
                 }
@@ -711,16 +747,9 @@ class LoginPage extends React.Component {
       </Row>
     );
   }
-  rendernoSidePicture(application, formStyle) {
-    if (application.enableSidePicture === true) {
-      application.formOffset = 0;
-    }
+  renderNoSidePicture(application, formStyle) {
     return (
       <Row style={{borderRadius: 5}}>
-        <Col span={8} offset={4}>
-          <div className="login-img" style={{backgroundImage: this.state.application.sidePicture, top: 0, bottom: 0}}>
-          </div>
-        </Col>
         <Col span={8} offset={application.formOffset === 0 || Setting.inIframe() || Setting.isMobile() ? 8 : application.formOffset} style={{display: "flex", justifyContent: "center", top: 0, bottom: 0}}>
           <div className="login-content">
             <div style={{marginTop: "40%", marginBottom: "25%", textAlign: "center", ...formStyle}}>
@@ -732,9 +761,6 @@ class LoginPage extends React.Component {
                 {
                   Setting.renderLogo(application)
                 }
-                {/* {*/}
-                {/*  this.state.clientId !== null ? "Redirect" : null*/}
-                {/* }*/}
                 {
                   this.renderSignedInBox()
                 }
@@ -772,11 +798,10 @@ class LoginPage extends React.Component {
     const formStyle = Setting.inIframe() ? null : Setting.parseObject(application.formCss);
 
     return (
-      <div className="loginBackground" style={{alignItems: "center", backgroundImage: Setting.inIframe() || Setting.isMobile() ? null : `url(${application.formBackgroundUrl})`}}>
+      <div className="loginBackground" style={{alignItems: "center", backgroundImage: Setting.inIframe() || Setting.isMobile() ? undefined : `url(${application.formBackgroundUrl})`}}>
         <CustomGithubCorner />
         {
-          // application.enableSidePicture === true ? this.renderSidePicture(application, formStyle) : this.rendernoSidePicture(application, formStyle)
-          this.renderSidePicture(application, formStyle)
+          (application.enableSidePicture === true && Setting.isMobile() === false) ? this.renderSidePicture(application, formStyle) : this.renderNoSidePicture(application, formStyle)
         }
       </div>
     );
