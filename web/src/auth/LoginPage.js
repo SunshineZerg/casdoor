@@ -725,7 +725,7 @@ class LoginPage extends React.Component {
               null
           }
           <div className="login-content" style={{flexGrow: 1, flexBasis: 0}}>
-            <div style={{marginTop: "25%", marginBottom: "15%", textAlign: "center", ...formStyle}}>
+            <div style={{marginTop: "25%", marginBottom: "15%", textAlign: "center"}}>
               <SelectLanguageBox id="language-box-corner" style={{top: "15%", right: "5%"}} />
               <div>
                 {
