@@ -714,12 +714,12 @@ class LoginPage extends React.Component {
     }
 
     return (
-      <Row style={{height: "100%", marginLeft: "10rem", marginRight: "10rem", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: convertFormOffset.bind(this)(application.formOffset)}}>
+      <Row style={{height: "100%", minHeight: "600px", marginLeft: "10rem", marginRight: "10rem", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: convertFormOffset.bind(this)(application.formOffset)}}>
         <Col span={15}
-          style={{height: "65%", minHeight: "480px", minWidth: isFullSize() ? "800px" : "440px", maxWidth: "800px", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "1rem", boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px"}}>
+          style={{height: "480px", minWidth: isFullSize() ? "800px" : "440px", maxWidth: "800px", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "1rem", boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px"}}>
           {
             isFullSize() ?
-              <div className="login-img" style={{width: "100%", height: "100%", display: "flex", flexGrow: 1, flexBasis: 0, justifyContent: "center", alignItems: "center", backgroundColor: "#7f5de3", borderRadius: "1rem 0rem 0rem 1rem"}}>
+              <div className="login-img" style={{width: "100%", minWidth: "400px", minHeight: "480px", height: "100%", display: "flex", flexGrow: 1, flexBasis: 0, justifyContent: "center", alignItems: "center", backgroundColor: "#7f5de3", borderRadius: "1rem 0rem 0rem 1rem"}}>
                 <img style={{display: "block", maxWidth: "50%", height: "auto"}} src={application.sidePicture}></img>
               </div> :
               null
