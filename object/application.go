@@ -71,6 +71,7 @@ type Application struct {
 	SignupHtml           string   `xorm:"mediumtext" json:"signupHtml"`
 	SigninHtml           string   `xorm:"mediumtext" json:"signinHtml"`
 	FormCss              string   `xorm:"text" json:"formCss"`
+	SidePicCSS           string	  `xorm:"text" json:"SidePicCSSC"`
 	FormOffset           int      `json:"formOffset"`
 	FormBackgroundUrl    string   `xorm:"varchar(200)" json:"formBackgroundUrl"`
 }
