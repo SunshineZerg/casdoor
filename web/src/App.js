@@ -16,8 +16,8 @@ import React, {Component} from "react";
 import "./App.less";
 import {Helmet} from "react-helmet";
 import * as Setting from "./Setting";
-import {DownOutlined, LogoutOutlined, SettingOutlined} from "@ant-design/icons";
-import {Avatar, BackTop, Button, Card, Dropdown, Layout, Menu, Result} from "antd";
+import {BarsOutlined, DownOutlined, LogoutOutlined, SettingOutlined} from "@ant-design/icons";
+import {Avatar, BackTop, Button, Card, Drawer, Dropdown, Layout, Menu, Result} from "antd";
 import {Link, Redirect, Route, Switch, withRouter} from "react-router-dom";
 import OrganizationListPage from "./OrganizationListPage";
 import OrganizationEditPage from "./OrganizationEditPage";
@@ -74,6 +74,7 @@ import ModelEditPage from "./ModelEditPage";
 import SystemInfo from "./SystemInfo";
 import AdapterListPage from "./AdapterListPage";
 import AdapterEditPage from "./AdapterEditPage";
+import {withTranslation} from "react-i18next";
 
 const {Header, Footer} = Layout;
 
@@ -85,6 +86,7 @@ class App extends Component {
       selectedMenuKey: 0,
       account: undefined,
       uri: null,
+      menuVisible: false,
     };
 
     Setting.initServerUrl();
@@ -298,12 +300,12 @@ class App extends Component {
       <Menu onClick={this.handleRightDropdownClick.bind(this)}>
         <Menu.Item key="/account">
           <SettingOutlined />
-          &nbsp;
+          &nbsp;&nbsp;
           {i18next.t("account:My Account")}
         </Menu.Item>
         <Menu.Item key="/logout">
           <LogoutOutlined />
-          &nbsp;
+          &nbsp;&nbsp;
           {i18next.t("account:Logout")}
         </Menu.Item>
       </Menu>
@@ -388,9 +390,6 @@ class App extends Component {
           </Link>
         </Menu.Item>
       );
-    }
-
-    if (Setting.isAdminUser(this.state.account)) {
       res.push(
         <Menu.Item key="/roles">
           <Link to="/roles">
@@ -598,6 +597,18 @@ class App extends Component {
     );
   }
 
+  onClose = () => {
+    this.setState({
+      menuVisible: false,
+    });
+  };
+
+  showMenu = () => {
+    this.setState({
+      menuVisible: true,
+    });
+  };
+
   renderContent() {
     if (!Setting.isMobile()) {
       return (
@@ -616,7 +627,7 @@ class App extends Component {
                   // theme="dark"
                   mode={(Setting.isMobile() && this.isStartPages()) ? "inline" : "horizontal"}
                   selectedKeys={[`${this.state.selectedMenuKey}`]}
-                  style={{lineHeight: "64px", width: "78%", position: "absolute", left: "145px"}}
+                  style={{lineHeight: "64px", position: "absolute", left: "145px", right: "200px"}}
                 >
                   {
                     this.renderMenu()
@@ -649,22 +660,28 @@ class App extends Component {
                 </Link>
               )
             }
-            <Menu
-            // theme="dark"
-              mode={(Setting.isMobile() && this.isStartPages()) ? "inline" : "horizontal"}
-              selectedKeys={[`${this.state.selectedMenuKey}`]}
-              style={{lineHeight: "64px"}}
-            >
-              {
-                this.renderMenu()
-              }
-              <div style = {{float: "right"}}>
+            <Drawer title={i18next.t("general:Close")} placement="left" visible={this.state.menuVisible} onClose={this.onClose}>
+              <Menu
+                // theme="dark"
+                mode={(Setting.isMobile()) ? "inline" : "horizontal"}
+                selectedKeys={[`${this.state.selectedMenuKey}`]}
+                style={{lineHeight: "64px"}}
+                onClick={this.onClose}
+              >
                 {
-                  this.renderAccount()
+                  this.renderMenu()
                 }
-                <SelectLanguageBox />
-              </div>
-            </Menu>
+              </Menu>
+            </Drawer>
+            <Button icon={<BarsOutlined />} onClick={this.showMenu} type="text">
+              {i18next.t("general:Menu")}
+            </Button>
+            <div style = {{float: "right"}}>
+              {
+                this.renderAccount()
+              }
+              <SelectLanguageBox />
+            </div>
           </Header>
           {
             this.renderRouter()
@@ -782,4 +799,4 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+export default withRouter(withTranslation()(App));
