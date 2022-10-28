@@ -21,11 +21,9 @@ import * as AdapterBackend from "./backend/AdapterBackend";
 import i18next from "i18next";
 import BaseListPage from "./BaseListPage";
 
-
-
-
-class AdapterListPage extends BaseListPage    {
+class AdapterListPage extends BaseListPage {
   newAdapter() {
+
     const randomName =Setting.getRandomName            ();
     return {
       owner: "built-in",
