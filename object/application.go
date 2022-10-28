@@ -39,10 +39,12 @@ type Application struct {
 
 	DisplayName         string          `xorm:"varchar(100)" json:"displayName"`
 	Logo                string          `xorm:"varchar(100)" json:"logo"`
+	SidePicture         string          `xorm:"varchar(100)" json:"sidePicture"`
 	HomepageUrl         string          `xorm:"varchar(100)" json:"homepageUrl"`
 	Description         string          `xorm:"varchar(100)" json:"description"`
 	Organization        string          `xorm:"varchar(100)" json:"organization"`
 	Cert                string          `xorm:"varchar(100)" json:"cert"`
+	EnableSidePicture   bool            `json:"enableSidePicture"`
 	EnablePassword      bool            `json:"enablePassword"`
 	EnableSignUp        bool            `json:"enableSignUp"`
 	EnableSigninSession bool            `json:"enableSigninSession"`
@@ -69,6 +71,7 @@ type Application struct {
 	SignupHtml           string   `xorm:"mediumtext" json:"signupHtml"`
 	SigninHtml           string   `xorm:"mediumtext" json:"signinHtml"`
 	FormCss              string   `xorm:"text" json:"formCss"`
+	SidePicCss           string	  `xorm:"text" json:"SidePicCss"`
 	FormOffset           int      `json:"formOffset"`
 	FormSideHtml         string   `xorm:"mediumtext" json:"formSideHtml"`
 	FormBackgroundUrl    string   `xorm:"varchar(200)" json:"formBackgroundUrl"`
