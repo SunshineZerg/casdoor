@@ -195,6 +195,38 @@ class ApplicationEditPage extends React.Component {
       });
   }
 
+  renderSidePictureOption() {
+    return (
+      <Row>
+        <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 2}>
+          {Setting.getLabel(i18next.t("general:Side picture"), i18next.t("general:Side picture - Tooltip"))} :
+        </Col>
+        <Col span={22} style={(Setting.isMobile()) ? {maxWidth: "100%"} : {}}>
+          <Row style={{marginTop: "20px"}} >
+            <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 1}>
+              {Setting.getLabel(i18next.t("general:URL"), i18next.t("general:URL - Tooltip"))} :
+            </Col>
+            <Col span={23} >
+              <Input prefix={<LinkOutlined />} value={this.state.application.sidePicture} onChange={e => {
+                this.updateApplicationField("sidePicture", e.target.value);
+              }} />
+            </Col>
+          </Row>
+          <Row style={{marginTop: "20px"}} >
+            <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 1}>
+              {i18next.t("general:Preview")}:
+            </Col>
+            <Col span={23} >
+              <a target="_blank" rel="noreferrer" href={this.state.application.sidePicture}>
+                <img src={this.state.application.sidePicture} alt={this.state.application.sidePicture} height={90} style={{marginBottom: "20px"}} />
+              </a>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    );
+  }
+
   renderApplication() {
     return (
       <Card size="small" title={
@@ -252,6 +284,19 @@ class ApplicationEditPage extends React.Component {
             </Row>
           </Col>
         </Row>
+        <Row style={{marginTop: "20px"}} >
+          <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 19 : 2}>
+            {Setting.getLabel(i18next.t("application:Display side picture"), i18next.t("application:Display side picture - Tooltip"))} :
+          </Col>
+          <Col span={1} >
+            <Switch checked={this.state.application.enableSidePicture} onChange={checked => {
+              this.updateApplicationField("enableSidePicture", checked);
+            }} />
+          </Col>
+        </Row>
+        {
+          this.state.application.enableSidePicture ? this.renderSidePictureOption() : null
+        }
         <Row style={{marginTop: "20px"}} >
           <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 2}>
             {Setting.getLabel(i18next.t("general:Home"), i18next.t("general:Home - Tooltip"))} :
@@ -720,7 +765,7 @@ class ApplicationEditPage extends React.Component {
 
     return (
       <React.Fragment>
-        <Col span={11}>
+        <Col span={9}>
           <Button style={{marginBottom: "10px"}} type="primary" shape="round" icon={<CopyOutlined />} onClick={() => {
             copy(`${window.location.origin}${signUpUrl}`);
             Setting.showMessage("success", i18next.t("application:Signup page URL copied to clipboard successfully, please paste it into the incognito window or another browser"));
@@ -729,7 +774,7 @@ class ApplicationEditPage extends React.Component {
             {i18next.t("application:Copy signup page URL")}
           </Button>
           <br />
-          <div style={{position: "relative", width: "90%", border: "1px solid rgb(217,217,217)", boxShadow: "10px 10px 5px #888888", alignItems: "center", overflow: "auto", flexDirection: "column", flex: "auto"}}>
+          <div style={{position: "relative", width: "90%", border: "1px solid rgb(217,217,217)", boxShadow: "10px 10px 5px #888888", alignItems: "center", overflow: "hidden", flexDirection: "column", flex: "auto"}}>
             {
               this.state.application.enablePassword ? (
                 <SignupPage application={this.state.application} />
@@ -740,7 +785,7 @@ class ApplicationEditPage extends React.Component {
             <div style={maskStyle} />
           </div>
         </Col>
-        <Col span={11}>
+        <Col span={13}>
           <Button style={{marginBottom: "10px"}} type="primary" shape="round" icon={<CopyOutlined />} onClick={() => {
             copy(`${window.location.origin}${signInUrl}`);
             Setting.showMessage("success", i18next.t("application:Signin page URL copied to clipboard successfully, please paste it into the incognito window or another browser"));
@@ -749,7 +794,7 @@ class ApplicationEditPage extends React.Component {
             {i18next.t("application:Copy signin page URL")}
           </Button>
           <br />
-          <div style={{position: "relative", width: "90%", border: "1px solid rgb(217,217,217)", boxShadow: "10px 10px 5px #888888", alignItems: "center", overflow: "auto", flexDirection: "column", flex: "auto"}}>
+          <div style={{position: "relative", width: "100%", border: "1px solid rgb(217,217,217)", boxShadow: "10px 10px 5px #888888", alignItems: "center", overflow: "hidden", flexDirection: "column", flex: "auto"}}>
             <LoginPage type={"login"} mode={"signin"} application={this.state.application} />
             <div style={maskStyle} />
           </div>

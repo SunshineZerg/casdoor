@@ -17,6 +17,7 @@ import {Link, useHistory} from "react-router-dom";
 import {Tag, Tooltip, message} from "antd";
 import {QuestionCircleTwoTone} from "@ant-design/icons";
 import {isMobile as isMobileDevice} from "react-device-detect";
+import moment from "moment";
 import "./i18n";
 import i18next from "i18next";
 import copy from "copy-to-clipboard";
@@ -937,6 +938,49 @@ export function getTag(color, text) {
       {text}
     </Tag>
   );
+}
+
+/**
+ * 
+ * @param {string} applicationName name of the application 
+ * @returns application config initial values.
+ */
+export function getApplicationInitialConfig(applicationName) {
+  return {
+    owner: "admin", // this.props.account.applicationname,
+    name: `application_${applicationName}`,
+    createdTime: moment().format(),
+    displayName: `New Application - ${applicationName}`,
+    logo: `${StaticBaseUrl}/img/casdoor-logo_1185x256.png`,
+    sidePicture: `${StaticBaseUrl}/img/casdoor-logo_1185x256.png`,
+    /**
+     * @note Left side picture will not be displyed by default
+     */
+    enableSidePicture: false,
+    enablePassword: true,
+    enableSignUp: true,
+    enableSigninSession: false,
+    enableCodeSignin: false,
+    enableSamlCompress: false,
+    providers: [
+      {name: "provider_captcha_default", canSignUp: false, canSignIn: false, canUnlink: false, prompted: false, alertType: "None"},
+    ],
+    signupItems: [
+      {name: "ID", visible: false, required: true, rule: "Random"},
+      {name: "Username", visible: true, required: true, rule: "None"},
+      {name: "Display name", visible: true, required: true, rule: "None"},
+      {name: "Password", visible: true, required: true, rule: "None"},
+      {name: "Confirm password", visible: true, required: true, rule: "None"},
+      {name: "Email", visible: true, required: true, rule: "Normal"},
+      {name: "Phone", visible: true, required: true, rule: "None"},
+      {name: "Agreement", visible: true, required: true, rule: "None"},
+    ],
+    cert: "cert-built-in",
+    redirectUris: ["http://localhost:9000/callback"],
+    tokenFormat: "JWT",
+    expireInHours: 24 * 7,
+    formOffset: 8,
+  };
 }
 
 export function getApplicationOrgName(application) {
