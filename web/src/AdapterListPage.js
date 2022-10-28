@@ -26,10 +26,10 @@ import BaseListPage from "./BaseListPage";
 
 class AdapterListPage extends BaseListPage    {
   newAdapter() {
-    const randomName =Setting.getRandomName  ();
+    const randomName =Setting.getRandomName            ();
     return {
       owner: "built-in",
-      name: `adapter_${randomName}`,
+      name: `adapter_${randomName}` ,
       createdTime: moment().format(),
       organization: "built-in",
       type: "Database",
